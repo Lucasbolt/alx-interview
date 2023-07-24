@@ -2,6 +2,7 @@
 """log parsing module."""
 import sys
 
+
 tfs = 0
 while True:
     nl = 0
