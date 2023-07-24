@@ -2,7 +2,7 @@
 """log parsing module."""
 import sys
 
-
+tfs = 0
 while True:
     nl = 0
     fsize = 0
@@ -22,7 +22,8 @@ while True:
                         ld[stat] = 1
                 except ValueError:
                     pass
-        print(f'File size: {fsize}')
+        tfs += fsize
+        print(f'File size: {tfs}')
         for a in sorted(ld):
             print(f'{a}: {ld[a]}')
     except KeyboardInterrupt:
