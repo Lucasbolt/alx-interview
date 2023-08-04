@@ -65,7 +65,8 @@ class NQueens:
             for col in range(self.n):
                 a = (row * self.n) + col
                 matches = zip(list([self.pos[a]]) * len(group), group)
-                used_positions = map(lambda x: self.is_attacking(x[0], x[1]), matches)
+                used_positions = map(lambda x: self.is_attacking(
+                    x[0], x[1]), matches)
                 group.append(self.pos[a].copy())
                 if not any(used_positions):
                     self.build_solution(row + 1, group)
@@ -111,4 +112,3 @@ def get_input():
 
 if __name__ == "__main__":
     main()
-
