@@ -1,42 +1,24 @@
 #!/usr/bin/node
 const request = require('request');
-
 const API_URL = 'https://swapi-api.hbtn.io/api';
 
-if (process.argv.length <= 2) {
-  console.log('Usage: node get_characters_names.js <film_id>');
-  process.exit(1);
+async function getCharactersNames(filmId) {
+    const charactersUrl = `${API_URL}/films/${filmId}/characters`;
+    const charactersResponse = await request(charactersUrl);
+    if (charactersResponse.statusCode !== 200) {
+        throw new Error(`Error getting characters for film ${filmId}: ${charactersResponse.text}`);
+    }
+
+    const charactersJson = await charactersResponse.json();
+    const charactersNames = charactersJson.map(character => character.name);
+    return charactersNames;
+}
+
+if (process.argv.length < 3) {
+    console.log('Usage: node get-characters-names.js <film_id>');
+    return;
 }
 
 const filmId = process.argv[2];
-
-function fetchCharacterName(url) {
-  return new Promise((resolve, reject) => {
-    request(url, (error, response, body) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-      const character = JSON.parse(body);
-      resolve(character.name);
-    });
-  });
-}
-
-request(`${API_URL}/films/${filmId}/`, (error, response, body) => {
-  if (error) {
-    console.error(error);
-    return;
-  }
-  
-  const film = JSON.parse(body);
-  const characterPromises = film.characters.map(fetchCharacterName);
-
-  Promise.all(characterPromises)
-    .then(names => {
-      console.log(names.join('\n'));
-    })
-    .catch(allError => {
-      console.error(allError);
-    });
-});
+const charactersNames = await getCharactersNames(filmId);
+console.log(charactersNames.join(', '));
