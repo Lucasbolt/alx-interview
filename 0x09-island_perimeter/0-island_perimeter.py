@@ -5,6 +5,9 @@ This module defines the island_perimeter function.
 
 
 def island_perimeter(grid):
+    """
+    calculates the island perimeter.
+    """
     rows = len(grid)
     cols = len(grid[0])
     perimeter = 0
