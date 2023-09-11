@@ -5,43 +5,28 @@ this module defines the prime game program
 
 
 def isWinner(x, nums):
-    def is_prime(num):
-        if num <= 1:
-            return False
-        for i in range(2, int(num**0.5) + 1):
-            if num % i == 0:
-                return False
-        return True
-
-    def can_win(n):
-        if n <= 1:
-            return False
-        if dp[n] != -1:
-            return dp[n]
-
-        for i in range(2, n + 1):
-            if is_prime(i) and n % i == 0:
-                # Try removing i and check if the opponent can win
-                if not can_win(n - i):
-                    dp[n] = True
-                    return True
-
-        dp[n] = False
-        return False
-
-    max_wins = 0
-    winner = None
-
-    for n in nums:
-        dp = [-1] * (n + 1)
-        maria_wins = can_win(n)
-
-        if maria_wins:
-            max_wins += 1
-
-    if max_wins == 0:
+    """Determines the winner of a prime game session with `x` rounds.
+    """
+    if x < 1 or not nums:
         return None
-    elif max_wins % 2 == 0:
-        return "Ben"
-    else:
-        return "Maria"
+    marias_wins, bens_wins = 0, 0
+    # Generate primes using the Sieve of Eratosthenes with a limit of the maximum number in nums
+    n = max(nums)
+    is_prime = [True] * (n + 1)
+    is_prime[0] = is_prime[1] = False
+    p = 2
+    while p * p <= n:
+        if is_prime[p]:
+            for i in range(p * p, n + 1, p):
+                is_prime[i] = False
+        p += 1
+
+    # Count primes less than or equal to n for each round
+    for _, n in zip(range(x), nums):
+        primes_count = sum(1 for i in range(2, n + 1) if is_prime[i])
+        bens_wins += primes_count % 2 == 0
+        marias_wins += primes_count % 2 == 1
+
+    if marias_wins == bens_wins:
+        return None
+    return 'Maria' if marias_wins > bens_wins else 'Ben'
