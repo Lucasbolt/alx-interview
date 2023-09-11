@@ -10,7 +10,6 @@ def isWinner(x, nums):
     if x < 1 or not nums:
         return None
     marias_wins, bens_wins = 0, 0
-    # Generate primes using the Sieve of Eratosthenes with a limit of the maximum number in nums
     n = max(nums)
     is_prime = [True] * (n + 1)
     is_prime[0] = is_prime[1] = False
